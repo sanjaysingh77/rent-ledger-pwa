@@ -67,7 +67,7 @@ window.addEventListener("beforeinstallprompt", (event) => {
 });
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js?v=7");
+  navigator.serviceWorker.register("service-worker.js?v=8");
 }
 
 function loadState() {
@@ -417,7 +417,19 @@ function copyUnpaid() {
 }
 
 function exportBackup() {
-  downloadFile(`rent-ledger-backup-${activeMonth}.json`, JSON.stringify(state, null, 2), "application/json");
+  const backup = JSON.stringify(state, null, 2);
+  downloadFile(`rent-ledger-backup-${activeMonth}.json`, backup, "application/json");
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(backup).then(
+      () => showToast("Backup downloaded and copied."),
+      () => showToast("Backup downloaded.")
+    );
+  } else {
+    els.restoreInput.value = backup;
+    els.restorePanel.hidden = false;
+    showToast("Backup text is ready below.");
+  }
 }
 
 function toggleRestore() {
