@@ -33,6 +33,7 @@ const els = {
   propertyList: document.querySelector("#propertyList"),
   restorePanel: document.querySelector("#restorePanel"),
   restoreInput: document.querySelector("#restoreInput"),
+  restoreFile: document.querySelector("#restoreFile"),
   propertyDialog: document.querySelector("#propertyDialog"),
   propertyForm: document.querySelector("#propertyForm"),
   dialogTitle: document.querySelector("#dialogTitle"),
@@ -49,6 +50,7 @@ document.querySelector("#exportBackup").addEventListener("click", exportBackup);
 document.querySelector("#restoreToggle").addEventListener("click", toggleRestore);
 document.querySelector("#cancelRestore").addEventListener("click", toggleRestore);
 document.querySelector("#restoreBackup").addEventListener("click", restoreBackup);
+els.restoreFile.addEventListener("change", loadRestoreFile);
 document.querySelector("#closeDialog").addEventListener("click", closeDialog);
 document.querySelector("#cancelDialog").addEventListener("click", closeDialog);
 els.deleteProperty.addEventListener("click", deleteProperty);
@@ -65,7 +67,7 @@ window.addEventListener("beforeinstallprompt", (event) => {
 });
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js?v=6");
+  navigator.serviceWorker.register("service-worker.js?v=7");
 }
 
 function loadState() {
@@ -422,6 +424,19 @@ function toggleRestore() {
   els.restorePanel.hidden = !els.restorePanel.hidden;
 }
 
+function loadRestoreFile() {
+  const file = els.restoreFile.files && els.restoreFile.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    els.restoreInput.value = String(reader.result || "");
+    showToast("Backup file loaded.");
+  });
+  reader.addEventListener("error", () => showToast("Backup file could not be read."));
+  reader.readAsText(file);
+}
+
 function restoreBackup() {
   try {
     const restored = JSON.parse(els.restoreInput.value);
@@ -435,6 +450,7 @@ function restoreBackup() {
     activeMonth = state.activeMonth;
     saveState();
     els.restoreInput.value = "";
+    els.restoreFile.value = "";
     els.restorePanel.hidden = true;
     render();
     showToast("Backup restored.");

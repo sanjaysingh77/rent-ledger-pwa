@@ -8,9 +8,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Rent Ledger">
   <title>Rent Ledger</title>
-  <link rel="manifest" href="manifest.json?v=6">
+  <link rel="manifest" href="manifest.json?v=7">
   <link rel="apple-touch-icon" href="icons/icon.svg">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
   <div class="app-shell">
@@ -77,6 +77,10 @@
       </section>
 
       <section id="restorePanel" class="restore-panel" hidden>
+        <label>
+          Backup file
+          <input id="restoreFile" type="file" accept="application/json,.json">
+        </label>
         <textarea id="restoreInput" placeholder="Paste backup JSON here"></textarea>
         <div class="button-row">
           <button id="cancelRestore" class="secondary-button" type="button">Cancel</button>
@@ -137,6 +141,6 @@
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>
