@@ -1,0 +1,18 @@
+{
+  "name": "Rent Ledger",
+  "short_name": "Rent Ledger",
+  "description": "Track monthly rent payments and unpaid reminders.",
+  "start_url": "./index.html?v=6",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7f3",
+  "theme_color": "#1f5f4d",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

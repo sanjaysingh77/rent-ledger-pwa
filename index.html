@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1f5f4d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Rent Ledger">
+  <title>Rent Ledger</title>
+  <link rel="manifest" href="manifest.json?v=6">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="styles.css?v=6">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>Rent Ledger</h1>
+        <p id="monthCaption">Monthly rent tracking</p>
+      </div>
+      <button id="installButton" class="ghost-button" type="button" hidden>Install</button>
+    </header>
+
+    <main>
+      <section class="month-strip" aria-label="Month controls">
+        <button id="prevMonth" class="icon-button" type="button" aria-label="Previous month">&#8249;</button>
+        <strong id="monthLabel"></strong>
+        <button id="nextMonth" class="icon-button" type="button" aria-label="Next month">&#8250;</button>
+      </section>
+
+      <section class="summary-grid" aria-label="Monthly summary">
+        <article>
+          <span>Expected</span>
+          <strong id="expectedTotal">$0</strong>
+        </article>
+        <article>
+          <span>Collected</span>
+          <strong id="collectedTotal">$0</strong>
+        </article>
+        <article>
+          <span>Remaining</span>
+          <strong id="remainingTotal">$0</strong>
+        </article>
+        <article>
+          <span>Paid</span>
+          <strong id="paidTotal">0/0</strong>
+        </article>
+      </section>
+
+      <section id="reminderPanel" class="reminder-panel" hidden>
+        <div>
+          <span>Reminders</span>
+          <strong id="reminderTitle"></strong>
+          <p id="reminderText"></p>
+        </div>
+        <button id="enableNotifications" class="small-button" type="button">Enable</button>
+      </section>
+
+      <section class="controls">
+        <input id="searchInput" type="search" placeholder="Search tenant or property">
+        <select id="statusFilter" aria-label="Filter properties">
+          <option value="all">All</option>
+          <option value="unpaid">Unpaid</option>
+          <option value="paid">Paid</option>
+          <option value="late">Late</option>
+        </select>
+      </section>
+
+      <section id="propertyList" class="property-list" aria-label="Properties"></section>
+
+      <section class="utility-panel">
+        <button id="addProperty" class="primary-button" type="button" onclick="openDialog()">Add Property</button>
+        <button id="copyUnpaid" class="secondary-button" type="button">Copy Unpaid</button>
+        <button id="exportBackup" class="secondary-button" type="button">Backup</button>
+        <button id="restoreToggle" class="secondary-button" type="button">Restore</button>
+      </section>
+
+      <section id="restorePanel" class="restore-panel" hidden>
+        <textarea id="restoreInput" placeholder="Paste backup JSON here"></textarea>
+        <div class="button-row">
+          <button id="cancelRestore" class="secondary-button" type="button">Cancel</button>
+          <button id="restoreBackup" class="primary-button" type="button">Restore</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="propertyDialog" class="modal" hidden>
+    <form id="propertyForm">
+      <header class="dialog-header">
+        <h2 id="dialogTitle">Add Property</h2>
+        <button id="closeDialog" class="icon-button" type="button" aria-label="Close">x</button>
+      </header>
+
+      <input id="propertyId" type="hidden">
+      <label>
+        Property name
+        <input id="propertyName" required placeholder="123 Main St">
+      </label>
+      <label>
+        Tenant
+        <input id="tenantName" required placeholder="Tenant name">
+      </label>
+      <label>
+        Monthly rent
+        <input id="rentAmount" required type="number" min="0" step="0.01" placeholder="1800">
+      </label>
+      <label>
+        Due day each month
+        <input id="dueDay" required type="number" min="1" max="31" step="1" value="1">
+      </label>
+      <label>
+        Reminder interval
+        <select id="reminderEvery">
+          <option value="1">Every day after due date</option>
+          <option value="2" selected>Every 2 days after due date</option>
+          <option value="3">Every 3 days after due date</option>
+          <option value="7">Every week after due date</option>
+        </select>
+      </label>
+      <label>
+        Payment method
+        <input id="paymentMethod" placeholder="Zelle, ACH, check, cash">
+      </label>
+      <label class="wide">
+        Notes
+        <textarea id="propertyNotes" placeholder="Late fee, reminder details, tenant contact"></textarea>
+      </label>
+
+      <footer class="dialog-actions">
+        <button id="deleteProperty" class="danger-button" type="button">Delete</button>
+        <button id="cancelDialog" class="secondary-button" type="button">Cancel</button>
+        <button class="primary-button" type="submit">Save</button>
+      </footer>
+    </form>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js?v=6"></script>
+</body>
+</html>
